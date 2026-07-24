@@ -27,6 +27,19 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+
+        // Unlock cursor with Escape
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            UnlockCursor();
+        }
+
+        // Relock cursor by clicking
+        if (Mouse.current.leftButton.wasPressedThisFrame && Cursor.lockState != CursorLockMode.Locked)
+        {
+            LockCursor();
+        }
+
         // Camera movement
         Vector2 delta = Mouse.current.delta.ReadValue();
         transform.position += new Vector3(delta.x, delta.y, 0f) * sensitivity;
@@ -49,5 +62,17 @@ public class CameraController : MonoBehaviour
             float target = isZoomed ? perspectiveZoom : defaultFOV;
             cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, target, zoomSpeed * Time.deltaTime);
         }
+    }
+
+    void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
